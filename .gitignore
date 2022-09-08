@@ -11,7 +11,7 @@
 .mtj.tmp/
 
 # Package Files #
-
+*.jar
 *.war
 *.nar
 *.ear
@@ -28,5 +28,6 @@ hs_err_pid*
 
 # Gradle
 .gradle
-
+gradlew
+gradlew.bat
 gradle-wrapper.properties
