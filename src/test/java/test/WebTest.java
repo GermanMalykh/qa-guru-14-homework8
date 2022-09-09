@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.*;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -28,57 +28,46 @@ public class WebTest {
         open("https://lenta.com/");
         $(".catalog-search__field").setValue(testData);
         $(".catalog-search__nodes").$(byText(testData)).click();
-        $$("div .catalog-grid__grid").shouldBe(CollectionCondition.sizeGreaterThan(0));
+        $$(".catalog-grid__grid").shouldBe(CollectionCondition.sizeGreaterThan(0));
     }
 
+    @CsvSource(value = {
+            "Яблоки, Фрукты",
+            "Чай, Чай"
+    })
+    @ParameterizedTest(name = "Категория \"{1}\" присутствует для продукта \"{0}\"")
+    @DisplayName("Отображение категории")
+    void checkCategoryAfterSearchTest(String testData, String expectedResult) {
+        open("https://lenta.com/");
+        $(".catalog-search__field").setValue(testData);
+        $(".catalog-search__nodes").$(byText(testData)).click();
+        $(".catalog-tree__list").shouldHave(text(expectedResult));
+    }
 
-    //    //    Для работы с несколькими аргументами (Данные из CsvSource с ожидаемым результатом)
-//    @CsvSource(value = {
-//            "Selenide, это фреймворк для автоматизированного тестирования",
-//            "Allure java, -framework успешно применяется в работе автоматизатора"
-//    })
-//    @ParameterizedTest(name = "Результаты поиска содержат текст \"{1}\" для запроса \"{0}\"")
-//    @DisplayName("Поиск")
-//    void searchWithTwoArgumentsTest(String testData, String expectedResult) {
-//        open("https://ya.ru");
-//        $("#text").setValue(testData);
-//        $("button[type='submit']").click();
-//        $$("li.serp-item")
-//                .filter(not(text("Реклама")))
-//                .first()
-//                .shouldHave(text(expectedResult));
-//    }
-//
-//    //    Для работы с несколькими аргументами, сложный (Данные из CsvSource с ожидаемым результатом)
-    static Stream<Arguments> dataProviderForCheckBrandsAfterSearchTest() {
+    static Stream<Arguments> dataProviderForCheckCatalogAfterSearchTest() {
         return Stream.of(
                 Arguments.of("Яблоки",
-                        List.of("Прочие Товары", "ЧТМ fantasy brands")),
+                        List.of("Готовая продукция " + "Грибы " + "Овощи " + "Фрукты " +
+                                "Слива, алыча " + "Арбуз " + "Дыня " + "Бананы " + "Виноград " +
+                                "Груши " + "Персики, нектарины " + "Фруктовые снеки и нарезки " +
+                                "Цитрусовые " + "Экзотические фрукты " + "Яблоки " + "Ягоды")),
                 Arguments.of("Чай",
-                        List.of("365 ДНЕЙ", "AHMAD TEA", "AKBAR", "AZERCAY", "BASILUR"))
+                        List.of("Какао и горячий шоколад " + "Кофе " + "Чай " + "Черный чай " + "Зеленый чай " +
+                                "Травяной чай " + "Другие сорта чая " + "Подарочные чайные наборы"))
         );
     }
 
-    @MethodSource("dataProviderForCheckBrandsAfterSearchTest")
-    @ParameterizedTest(name = "Для товара \"{0}\", отображаются брэнды \"{1}\"")
-    void checkBrandsAfterSearchTest(String product, List<String> expectedBrands) {
-
+    @MethodSource("dataProviderForCheckCatalogAfterSearchTest")
+    @ParameterizedTest(name = "Для товара \"{0}\", отображаются каталоги \"{1}\"")
+    @DisplayName("Отображение каталогов")
+    void checkCatalogAfterSearchTest(String product, List<String> expectedBrands) {
 
         open("https://lenta.com/");
         $(".catalog-search__field").setValue(product);
         $(".catalog-search__nodes").$(byText(product)).click();
-        $$(".catalog-filters-control .simplebar-content")
+        $$(".catalog-tree__list")
                 .shouldHave(CollectionCondition.exactTexts(expectedBrands));
 
     }
-//
-//    //    Для работы со словарём
-//    @EnumSource(Lang.class)
-//    @ParameterizedTest
-//    void selenideSiteMenuLangEnumTest(Lang lang) {
-//        open("https://Selenide.org");
-//        $$("#languages a").find(text(lang.name())).click();
-//        $("#selenide-logo").shouldBe(visible);
-//    }
 
 }
