@@ -3,6 +3,7 @@ package com.lenta.tests;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Flaky;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -87,7 +88,7 @@ public class WebTests extends TestBase {
                                 "Травяной чай " + "Другие сорта чая " + "Подарочные чайные наборы"))
         );
     }
-
+    @Flaky
     @MethodSource("dataProviderForCheckCatalogAfterSearchTest")
     @ParameterizedTest(name = "Для товара \"{0}\", отображаются каталоги \"{1}\"")
     @DisplayName("Отображение каталогов")
