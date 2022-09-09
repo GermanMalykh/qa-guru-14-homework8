@@ -36,6 +36,8 @@ public class WebTests extends TestBase {
     void searchProductsTest(String testData) {
         step("Открываем главную страницу " + PAGE_URL, () -> {
             open(PAGE_URL);
+            clearBrowserCookies();
+            clearBrowserLocalStorage();
         });
         step("Вводим в поле поиска " + testData, () -> {
             searchInput.setValue(testData);
@@ -58,6 +60,8 @@ public class WebTests extends TestBase {
     void checkCategoryAfterSearchTest(String testData, String expectedResult) {
         step("Открываем главную страницу " + PAGE_URL, () -> {
             open(PAGE_URL);
+            clearBrowserCookies();
+            clearBrowserLocalStorage();
         });
         step("Вводим в поле поиска " + testData, () -> {
             searchInput.setValue(testData);
@@ -90,6 +94,8 @@ public class WebTests extends TestBase {
     void checkCatalogAfterSearchTest(String product, List<String> expectedCatalogs) {
         step("Открываем главную страницу " + PAGE_URL, () -> {
             open(PAGE_URL);
+            clearBrowserCookies();
+            clearBrowserLocalStorage();
         });
         step("Вводим в поле поиска " + product, () -> {
             searchInput.setValue(product);
